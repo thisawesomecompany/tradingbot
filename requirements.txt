@@ -1,0 +1,3 @@
+pandas
+lightweight-charts
+ibapi 

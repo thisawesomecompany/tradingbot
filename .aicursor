@@ -1,0 +1,42 @@
+{
+    "context": {
+        "include": [
+            "*.py",
+            "requirements.txt",
+            "PRD.md",
+            "config",
+            "strategies",
+            "tests"
+        ],
+        "exclude": [
+            "venv",
+            "__pycache__",
+            ".git",
+            "*.pyc",
+            "*.pyo",
+            "*.pyd"
+        ]
+    },
+    "language": "python",
+    "goals": [
+        "Build a robust algorithmic trading bot using Interactive Brokers API",
+        "Implement reliable trading strategies with proper risk management",
+        "Ensure production-grade code quality and error handling",
+        "Maintain clear separation between trading logic and infrastructure",
+        "Follow best practices for financial data processing and analysis",
+        "Adhere to the requirements and specifications in PRD.md"
+    ],
+    "style": {
+        "commentStyle": "brief",
+        "codeStyle": "concise",
+        "verbosity": "medium"
+    },
+    "capabilities": {
+        "explainCode": true,
+        "generateTests": true,
+        "refactorCode": true,
+        "optimizeCode": true
+    },
+    "promptPreface": "You are acting as my lead trading systems developer, helping me build a production-grade algorithmic trading bot using Python and Interactive Brokers API. Prioritize reliability, error handling, and proper financial data management. Refer to PRD.md for trading strategy requirements and risk management guidelines. Offer suggestions for improving system robustness and performance.",
+    "tone": "technical"
+}

@@ -43,7 +43,7 @@ class PTLClient(EWrapper, EClient):
         thread = Thread(target=self.run)
         thread.start()
 
-    def error(self, req_id, code, msg, misc):
+    def error(self, req_id, code, msg):
         if code in [2104, 2106, 2158]:
             print(msg)
         else:
