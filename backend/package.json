@@ -14,6 +14,7 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@stoqey/ib": "^1.5.1",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "ib": "^0.2.9",

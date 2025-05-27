@@ -73,15 +73,15 @@
 
 ## **Phase 3: Core Trading Integration (Days 4-6)**
 
-### **Task 3.1: Add IB API Integration to Backend**
+### **Task 3.1: Add IB API Integration to Backend** ✅
 **Goal**: Connect to Interactive Brokers from Node.js  
 **Must Have**: Can connect to IB paper trading account
 
-- [ ] Create `src/services/ibService.ts`
-- [ ] Implement basic IB connection using `ib` package
-- [ ] Add connection status endpoint
-- [ ] Add basic error handling for IB connection
-- [ ] Test: Backend connects to IB paper account
+- [x] Create `src/services/ibService.ts`
+- [x] Implement basic IB connection using `ib` package
+- [x] Add connection status endpoint
+- [x] Add basic error handling for IB connection
+- [x] Test: Backend connects to IB paper account
 
 ### **Task 3.2: Add Market Data Endpoints**
 **Goal**: Serve basic market data to frontend  
