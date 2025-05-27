@@ -87,4 +87,112 @@ router.post('/ib/disconnect', async (req, res) => {
     }
 });
 
+// Market Data endpoints  
+router.get('/market/quote/:symbol', (req, res) => {
+    (async () => {
+        try {
+            const symbol = req.params.symbol.toUpperCase();
+            const exchange = req.query.exchange as string || 'SMART';
+            const currency = req.query.currency as string || 'USD';
+
+            if (!symbol) {
+                return res.status(400).json({
+                    error: 'Symbol is required',
+                    message: 'Please provide a valid stock symbol'
+                });
+            }
+
+            // Check if connected to IB
+            if (!ibService.isConnected()) {
+                // Return mock data when not connected to IB
+                const mockQuote = {
+                    symbol: symbol,
+                    exchange: exchange,
+                    currency: currency,
+                    bid: 100.25,
+                    ask: 100.30,
+                    last: 100.27,
+                    close: 99.85,
+                    volume: 1000000,
+                    lastUpdate: new Date().toISOString(),
+                    error: 'Mock data - IB not connected'
+                };
+
+                return res.json({
+                    quote: mockQuote,
+                    source: 'mock'
+                });
+            }
+
+            // Get real market data from IB
+            const quote = await ibService.getMarketQuote(symbol, exchange, currency);
+            res.json({
+                quote: quote,
+                source: 'ib'
+            });
+
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            console.error(`❌ Error fetching quote for ${req.params.symbol}:`, errorMessage);
+
+            res.status(500).json({
+                error: errorMessage,
+                message: 'Failed to fetch market quote',
+                symbol: req.params.symbol
+            });
+        }
+    })();
+});
+
+router.get('/market/search/:pattern', (req, res) => {
+    (async () => {
+        try {
+            const pattern = req.params.pattern;
+
+            if (!pattern || pattern.length < 1) {
+                return res.status(400).json({
+                    error: 'Search pattern is required',
+                    message: 'Please provide a search pattern'
+                });
+            }
+
+            // Check if connected to IB
+            if (!ibService.isConnected()) {
+                // Return mock search results when not connected
+                const mockResults = [
+                    {
+                        symbol: pattern.toUpperCase(),
+                        secType: 'STK',
+                        exchange: 'SMART',
+                        currency: 'USD',
+                        description: `Mock result for ${pattern.toUpperCase()}`
+                    }
+                ];
+
+                return res.json({
+                    results: mockResults,
+                    source: 'mock'
+                });
+            }
+
+            // Get real search results from IB
+            const results = await ibService.searchSymbol(pattern);
+            res.json({
+                results: results,
+                source: 'ib'
+            });
+
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            console.error(`❌ Error searching for ${req.params.pattern}:`, errorMessage);
+
+            res.status(500).json({
+                error: errorMessage,
+                message: 'Failed to search symbols',
+                pattern: req.params.pattern
+            });
+        }
+    })();
+});
+
 export default router; 

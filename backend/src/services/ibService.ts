@@ -1,4 +1,4 @@
-import { IBApi, EventName, ErrorCode } from '@stoqey/ib';
+import { IBApi, EventName, ErrorCode, Contract, TickType, SecType } from '@stoqey/ib';
 
 export interface IBConnectionConfig {
     host: string;
@@ -8,6 +8,19 @@ export interface IBConnectionConfig {
 
 export interface IBConnectionStatus {
     connected: boolean;
+    lastUpdate: string;
+    error?: string;
+}
+
+export interface MarketQuote {
+    symbol: string;
+    exchange: string;
+    currency: string;
+    bid: number | null;
+    ask: number | null;
+    last: number | null;
+    close: number | null;
+    volume: number | null;
     lastUpdate: string;
     error?: string;
 }
@@ -24,6 +37,16 @@ class IBService {
         port: parseInt(process.env.IB_PORT || '7497'), // TWS Paper Trading port
         clientId: parseInt(process.env.IB_CLIENT_ID || '1')
     };
+
+    // Market data tracking
+    private marketDataRequests = new Map<number, {
+        symbol: string;
+        resolve: (quote: MarketQuote) => void;
+        reject: (error: Error) => void;
+        quote: Partial<MarketQuote>;
+        timeout: NodeJS.Timeout;
+    }>();
+    private nextReqId = 1;
 
     constructor() {
         console.log('🔌 IBService initialized with config:', {
@@ -130,6 +153,85 @@ class IBService {
     }
 
     /**
+     * Get market quote for a symbol
+     */
+    public async getMarketQuote(symbol: string, exchange: string = 'SMART', currency: string = 'USD'): Promise<MarketQuote> {
+        if (!this.isConnected() || !this.ib) {
+            throw new Error('Not connected to IB');
+        }
+
+        return new Promise((resolve, reject) => {
+            const reqId = this.nextReqId++;
+
+            // Create contract
+            const contract: Contract = {
+                symbol: symbol.toUpperCase(),
+                secType: 'STK' as SecType,
+                exchange: exchange,
+                currency: currency
+            };
+
+            // Initialize quote object
+            const quote: Partial<MarketQuote> = {
+                symbol: symbol.toUpperCase(),
+                exchange: exchange,
+                currency: currency,
+                lastUpdate: new Date().toISOString()
+            };
+
+            // Set timeout for request (10 seconds)
+            const timeout = setTimeout(() => {
+                this.marketDataRequests.delete(reqId);
+                if (this.ib) {
+                    this.ib.cancelMktData(reqId);
+                }
+                reject(new Error(`Market data request timeout for ${symbol}`));
+            }, 10000);
+
+            // Store request
+            this.marketDataRequests.set(reqId, {
+                symbol: symbol.toUpperCase(),
+                resolve,
+                reject,
+                quote,
+                timeout
+            });
+
+            try {
+                // Request market data
+                this.ib!.reqMktData(reqId, contract, '', false, false);
+                console.log(`📊 Requesting market data for ${symbol} (reqId: ${reqId})`);
+            } catch (error) {
+                clearTimeout(timeout);
+                this.marketDataRequests.delete(reqId);
+                reject(error);
+            }
+        });
+    }
+
+    /**
+     * Search for contracts by symbol
+     */
+    public async searchSymbol(pattern: string): Promise<Contract[]> {
+        if (!this.isConnected() || !this.ib) {
+            throw new Error('Not connected to IB');
+        }
+
+        // For now, return a simple mock response
+        // In a full implementation, you'd use reqMatchingSymbols
+        const mockResults: Contract[] = [
+            {
+                symbol: pattern.toUpperCase(),
+                secType: 'STK' as SecType,
+                exchange: 'SMART',
+                currency: 'USD'
+            }
+        ];
+
+        return Promise.resolve(mockResults);
+    }
+
+    /**
      * Set up event handlers for IB API
      */
     private setupEventHandlers(): void {
@@ -169,6 +271,41 @@ class IBService {
         this.ib.on(EventName.nextValidId, (orderId: number) => {
             console.log(`📋 Next valid order ID: ${orderId}`);
         });
+
+        // Market data events
+        this.ib.on(EventName.tickPrice, (reqId: number, tickType: number, price: number) => {
+            const request = this.marketDataRequests.get(reqId);
+            if (!request) return;
+
+            // Update quote based on tick type (using numeric constants)
+            switch (tickType) {
+                case 1: // BID
+                    request.quote.bid = price;
+                    break;
+                case 2: // ASK
+                    request.quote.ask = price;
+                    break;
+                case 4: // LAST
+                    request.quote.last = price;
+                    break;
+                case 9: // CLOSE
+                    request.quote.close = price;
+                    break;
+            }
+
+            // Check if we have enough data to resolve
+            this.checkAndResolveQuote(reqId);
+        });
+
+        // For now, simplify and just use tickPrice events
+        // this.ib.on(EventName.tickSize, (reqId: number, tickType: number, size: number) => {
+        //     const request = this.marketDataRequests.get(reqId);
+        //     if (!request) return;
+        //     if (tickType === 8) {
+        //         request.quote.volume = size;
+        //     }
+        //     this.checkAndResolveQuote(reqId);
+        // });
     }
 
     /**
@@ -190,6 +327,42 @@ class IBService {
 
             checkConnection();
         });
+    }
+
+    /**
+     * Check if we have enough market data and resolve the quote
+     */
+    private checkAndResolveQuote(reqId: number): void {
+        const request = this.marketDataRequests.get(reqId);
+        if (!request) return;
+
+        const quote = request.quote;
+
+        // If we have at least one price (bid, ask, or last), resolve the quote
+        if (quote.bid !== undefined || quote.ask !== undefined || quote.last !== undefined) {
+            clearTimeout(request.timeout);
+            this.marketDataRequests.delete(reqId);
+
+            // Cancel the market data request
+            if (this.ib) {
+                this.ib.cancelMktData(reqId);
+            }
+
+            // Create final quote with defaults
+            const finalQuote: MarketQuote = {
+                symbol: quote.symbol || request.symbol,
+                exchange: quote.exchange || 'SMART',
+                currency: quote.currency || 'USD',
+                bid: quote.bid || null,
+                ask: quote.ask || null,
+                last: quote.last || null,
+                close: quote.close || null,
+                volume: quote.volume || null,
+                lastUpdate: quote.lastUpdate || new Date().toISOString()
+            };
+
+            request.resolve(finalQuote);
+        }
     }
 }
 

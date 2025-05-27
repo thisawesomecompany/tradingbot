@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { MarketQuote } from '../components/MarketQuote';
 
 const Trading: React.FC = () => {
     const [symbol, setSymbol] = useState('AAPL');
@@ -96,6 +97,11 @@ const Trading: React.FC = () => {
                         🔴 SELL
                     </button>
                 </div>
+            </div>
+
+            {/* Market Quote Component */}
+            <div style={{ margin: '1rem' }}>
+                <MarketQuote />
             </div>
 
             <div style={{

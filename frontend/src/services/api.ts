@@ -33,6 +33,37 @@ export interface HealthCheck {
     version: string;
 }
 
+export interface MarketQuote {
+    symbol: string;
+    exchange: string;
+    currency: string;
+    bid: number | null;
+    ask: number | null;
+    last: number | null;
+    close: number | null;
+    volume: number | null;
+    lastUpdate: string;
+    error?: string;
+}
+
+export interface MarketQuoteResponse {
+    quote: MarketQuote;
+    source: 'mock' | 'ib';
+}
+
+export interface MarketSearchResult {
+    symbol: string;
+    secType: string;
+    exchange: string;
+    currency: string;
+    description?: string;
+}
+
+export interface MarketSearchResponse {
+    results: MarketSearchResult[];
+    source: 'mock' | 'ib';
+}
+
 // API functions
 export const api = {
     // Health check
@@ -58,6 +89,31 @@ export const api = {
         const response = await fetch(`${API_BASE_URL}/trading/positions`);
         if (!response.ok) {
             throw new Error(`Failed to get positions: ${response.statusText}`);
+        }
+        return response.json();
+    },
+
+    // Get market quote for a symbol
+    async getMarketQuote(symbol: string, exchange: string = 'SMART', currency: string = 'USD'): Promise<MarketQuoteResponse> {
+        const params = new URLSearchParams();
+        if (exchange !== 'SMART') params.append('exchange', exchange);
+        if (currency !== 'USD') params.append('currency', currency);
+
+        const queryString = params.toString();
+        const url = `${API_BASE_URL}/market/quote/${symbol.toUpperCase()}${queryString ? '?' + queryString : ''}`;
+
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Failed to get quote for ${symbol}: ${response.statusText}`);
+        }
+        return response.json();
+    },
+
+    // Search for symbols
+    async searchSymbol(pattern: string): Promise<MarketSearchResponse> {
+        const response = await fetch(`${API_BASE_URL}/market/search/${encodeURIComponent(pattern)}`);
+        if (!response.ok) {
+            throw new Error(`Failed to search for ${pattern}: ${response.statusText}`);
         }
         return response.json();
     }

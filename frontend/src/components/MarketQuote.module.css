@@ -1,0 +1,155 @@
+.marketQuote {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    background: white;
+    margin: 20px 0;
+}
+
+.quoteSearch {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.quoteSearch input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.quoteSearch button {
+    padding: 8px 16px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.quoteSearch button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.quoteSearch button:hover:not(:disabled) {
+    background: #0056b3;
+}
+
+.errorMessage {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
+.quoteDisplay {
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 15px;
+    background: #f9f9f9;
+}
+
+.quoteHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.quoteHeader h4 {
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+}
+
+.quoteSource {
+    font-size: 12px;
+    color: #666;
+    background: #e9ecef;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.quoteGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.quoteItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: white;
+    border-radius: 4px;
+    border: 1px solid #eee;
+}
+
+.quoteItem label {
+    font-weight: 500;
+    color: #555;
+}
+
+.price {
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+}
+
+.price.bid {
+    color: #dc3545;
+}
+
+.price.ask {
+    color: #28a745;
+}
+
+.quoteNote {
+    background: #d1ecf1;
+    color: #0c5460;
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    margin: 10px 0;
+}
+
+.quoteFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+}
+
+.quoteFooter small {
+    color: #666;
+}
+
+.quoteFooter button {
+    padding: 6px 12px;
+    background: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.quoteFooter button:hover:not(:disabled) {
+    background: #545b62;
+}
+
+.quoteFooter button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}

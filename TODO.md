@@ -83,15 +83,15 @@
 - [x] Add basic error handling for IB connection
 - [x] Test: Backend connects to IB paper account
 
-### **Task 3.2: Add Market Data Endpoints**
+### **Task 3.2: Add Market Data Endpoints** ✅
 **Goal**: Serve basic market data to frontend  
 **Must Have**: Can fetch and display stock quotes
 
-- [ ] Add `/api/market/quote/:symbol` endpoint
-- [ ] Implement basic quote fetching from IB
-- [ ] Add market data display to frontend
-- [ ] Add symbol search/input functionality
-- [ ] Test: Can search symbols and see quotes
+- [x] Add `/api/market/quote/:symbol` endpoint
+- [x] Implement basic quote fetching from IB
+- [x] Add market data display to frontend
+- [x] Add symbol search/input functionality
+- [x] Test: Can search symbols and see quotes
 
 ### **Task 3.3: Add Basic Trading Controls**
 **Goal**: Enable basic order placement  
@@ -179,8 +179,10 @@ npm run dev
 - [x] Backend scaffolded (Node.js + TypeScript)
 - [x] **Phase 1 Complete**: Backend Foundation ✅
 - [x] **Phase 2 Complete**: Frontend Foundation (Dashboard UI + API Integration + Navigation) ✅
+- [x] **Task 3.1 Complete**: IB API Integration ✅
+- [x] **Task 3.2 Complete**: Market Data Endpoints ✅
 - [x] **Documentation**: README.md updated with usage, testing, and TODO integration ✅
-- [ ] **Next**: Phase 3 - Core Trading Integration (IB API)
+- [ ] **Next**: Task 3.3 - Basic Trading Controls
 
 **Last Updated**: May 27, 2025  
-**Current Phase**: Phase 3 - Core Trading Integration (Ready to start) 
+**Current Phase**: Phase 3 - Core Trading Integration (Task 3.2 complete, ready for Task 3.3) 
