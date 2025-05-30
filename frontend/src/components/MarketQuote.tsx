@@ -7,7 +7,7 @@ export function MarketQuote() {
     const [symbol, setSymbol] = useState('AAPL');
     const [currentSymbol, setCurrentSymbol] = useState('');
     const [autoRefresh, setAutoRefresh] = useState(false);
-    const [refreshInterval, setRefreshInterval] = useState(3); // seconds
+    const [refreshInterval, setRefreshInterval] = useState(1); // seconds - 1s default for trading apps
     const [lastQuote, setLastQuote] = useState<MarketQuoteType | null>(null);
     const intervalRef = useRef<number | null>(null);
 

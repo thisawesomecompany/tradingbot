@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { MarketQuote } from '../components/MarketQuote';
+import { TradingChart } from '../components/TradingChart';
 
 const Trading: React.FC = () => {
-    const [symbol, setSymbol] = useState('AAPL');
-    const [quantity, setQuantity] = useState(100);
+    const [selectedSymbol, setSelectedSymbol] = useState('SPY');
 
     return (
         <div>
@@ -11,110 +11,144 @@ const Trading: React.FC = () => {
                 margin: '1rem',
                 fontSize: '1.5rem',
                 color: '#333',
-                borderBottom: '2px solid #28a745',
+                borderBottom: '2px solid #007bff',
                 paddingBottom: '0.5rem'
             }}>
-                💰 Trading
+                📈 Trading
             </h1>
 
+            {/* Trading Chart - Main Feature */}
+            <TradingChart
+                symbol={selectedSymbol}
+                onSymbolChange={setSelectedSymbol}
+            />
+
+            {/* Market Quote Panel */}
+            <MarketQuote />
+
+            {/* Trading Controls Section */}
             <div style={{
                 margin: '1rem',
                 padding: '1rem',
-                border: '1px solid #ddd',
-                borderRadius: '8px',
-                backgroundColor: '#f8f9fa'
+                background: '#f8f9fa',
+                border: '1px solid #dee2e6',
+                borderRadius: '8px'
             }}>
-                <h3>Order Entry</h3>
-
-                <div style={{ marginBottom: '1rem' }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
-                        Symbol:
-                    </label>
-                    <input
-                        type="text"
-                        value={symbol}
-                        onChange={(e) => setSymbol(e.target.value.toUpperCase())}
-                        style={{
-                            padding: '0.5rem',
-                            border: '1px solid #ccc',
-                            borderRadius: '4px',
-                            fontSize: '1rem',
-                            width: '200px'
-                        }}
-                        placeholder="Enter symbol"
-                    />
-                </div>
-
-                <div style={{ marginBottom: '1rem' }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
-                        Quantity:
-                    </label>
-                    <input
-                        type="number"
-                        value={quantity}
-                        onChange={(e) => setQuantity(parseInt(e.target.value) || 0)}
-                        style={{
-                            padding: '0.5rem',
-                            border: '1px solid #ccc',
-                            borderRadius: '4px',
-                            fontSize: '1rem',
-                            width: '200px'
-                        }}
-                        min="1"
-                    />
-                </div>
-
-                <div style={{ display: 'flex', gap: '1rem' }}>
+                <h3>🎯 Trading Controls</h3>
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                    gap: '15px',
+                    marginTop: '15px'
+                }}>
                     <button
                         style={{
-                            padding: '0.75rem 1.5rem',
-                            backgroundColor: '#28a745',
+                            padding: '12px 20px',
+                            background: '#28a745',
                             color: 'white',
                             border: 'none',
-                            borderRadius: '4px',
-                            fontSize: '1rem',
+                            borderRadius: '6px',
+                            fontSize: '16px',
+                            fontWeight: 'bold',
                             cursor: 'pointer',
-                            fontWeight: 'bold'
+                            transition: 'background-color 0.2s'
                         }}
-                        onClick={() => alert(`Buy ${quantity} shares of ${symbol} (Mock Order)`)}
+                        onMouseOver={(e) => e.currentTarget.style.background = '#218838'}
+                        onMouseOut={(e) => e.currentTarget.style.background = '#28a745'}
+                        onClick={() => {
+                            console.log('🟢 Buy order for', selectedSymbol);
+                            alert(`Buy order for ${selectedSymbol} (Demo mode)`);
+                        }}
                     >
-                        🟢 BUY
+                        🟢 BUY {selectedSymbol}
                     </button>
 
                     <button
                         style={{
-                            padding: '0.75rem 1.5rem',
-                            backgroundColor: '#dc3545',
+                            padding: '12px 20px',
+                            background: '#dc3545',
                             color: 'white',
                             border: 'none',
-                            borderRadius: '4px',
-                            fontSize: '1rem',
+                            borderRadius: '6px',
+                            fontSize: '16px',
+                            fontWeight: 'bold',
                             cursor: 'pointer',
-                            fontWeight: 'bold'
+                            transition: 'background-color 0.2s'
                         }}
-                        onClick={() => alert(`Sell ${quantity} shares of ${symbol} (Mock Order)`)}
+                        onMouseOver={(e) => e.currentTarget.style.background = '#c82333'}
+                        onMouseOut={(e) => e.currentTarget.style.background = '#dc3545'}
+                        onClick={() => {
+                            console.log('🔴 Sell order for', selectedSymbol);
+                            alert(`Sell order for ${selectedSymbol} (Demo mode)`);
+                        }}
                     >
-                        🔴 SELL
+                        🔴 SELL {selectedSymbol}
                     </button>
+
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px',
+                        padding: '12px',
+                        background: 'white',
+                        border: '1px solid #ced4da',
+                        borderRadius: '6px'
+                    }}>
+                        <label style={{ fontWeight: '500', minWidth: '80px' }}>Quantity:</label>
+                        <input
+                            type="number"
+                            defaultValue={100}
+                            min={1}
+                            style={{
+                                flex: 1,
+                                padding: '8px',
+                                border: '1px solid #ced4da',
+                                borderRadius: '4px',
+                                fontSize: '14px'
+                            }}
+                        />
+                    </div>
+
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px',
+                        padding: '12px',
+                        background: 'white',
+                        border: '1px solid #ced4da',
+                        borderRadius: '6px'
+                    }}>
+                        <label style={{ fontWeight: '500', minWidth: '80px' }}>Order Type:</label>
+                        <select
+                            style={{
+                                flex: 1,
+                                padding: '8px',
+                                border: '1px solid #ced4da',
+                                borderRadius: '4px',
+                                fontSize: '14px',
+                                background: 'white'
+                            }}
+                        >
+                            <option value="market">Market</option>
+                            <option value="limit">Limit</option>
+                            <option value="stop">Stop</option>
+                            <option value="stop-limit">Stop Limit</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
 
-            {/* Market Quote Component */}
-            <div style={{ margin: '1rem' }}>
-                <MarketQuote />
-            </div>
-
-            <div style={{
-                margin: '1rem',
-                padding: '1rem',
-                border: '1px solid #ddd',
-                borderRadius: '8px',
-                backgroundColor: '#fff3cd'
-            }}>
-                <h3>⚠️ Paper Trading Mode</h3>
-                <p>All orders are simulated. No real money is involved.</p>
-                <p>Current Symbol: <strong>{symbol}</strong></p>
-                <p>Order Size: <strong>{quantity} shares</strong></p>
+                <div style={{
+                    marginTop: '15px',
+                    padding: '10px',
+                    background: '#e7f3ff',
+                    border: '1px solid #b8daff',
+                    borderRadius: '4px',
+                    fontSize: '14px',
+                    color: '#495057'
+                }}>
+                    <strong>📝 Note:</strong> This is a demo interface. Trading functionality will be connected to Interactive Brokers in production.
+                    Use keyboard shortcuts: <strong>Shift+O</strong> (Buy) | <strong>Shift+P</strong> (Sell) | <strong>Shift+S</strong> (Screenshot)
+                </div>
             </div>
         </div>
     );

@@ -70,6 +70,22 @@ export interface MarketSearchResponse {
     source: 'mock' | 'ib';
 }
 
+export interface HistoricalBar {
+    time: number;
+    open: number;
+    high: number;
+    low: number;
+    close: number;
+    volume: number;
+}
+
+export interface HistoricalDataResponse {
+    symbol: string;
+    timeframe: string;
+    bars: HistoricalBar[];
+    source: 'mock' | 'ib';
+}
+
 // API functions
 export const api = {
     // Health check
@@ -100,18 +116,18 @@ export const api = {
     },
 
     // Get market quote for a symbol
-    async getMarketQuote(symbol: string, exchange: string = 'SMART', currency: string = 'USD'): Promise<MarketQuoteResponse> {
+    async getMarketQuote(symbol: string, exchange?: string, currency?: string): Promise<MarketQuoteResponse> {
         const params = new URLSearchParams();
-        if (exchange !== 'SMART') params.append('exchange', exchange);
-        if (currency !== 'USD') params.append('currency', currency);
+        if (exchange) params.append('exchange', exchange);
+        if (currency) params.append('currency', currency);
 
-        const queryString = params.toString();
-        const url = `${API_BASE_URL}/market/quote/${symbol.toUpperCase()}${queryString ? '?' + queryString : ''}`;
-
+        const url = `${API_BASE_URL}/market/quote/${symbol}${params.toString() ? '?' + params.toString() : ''}`;
         const response = await fetch(url);
+
         if (!response.ok) {
-            throw new Error(`Failed to get quote for ${symbol}: ${response.statusText}`);
+            throw new Error(`Failed to fetch quote: ${response.statusText}`);
         }
+
         return response.json();
     },
 
@@ -121,6 +137,22 @@ export const api = {
         if (!response.ok) {
             throw new Error(`Failed to search for ${pattern}: ${response.statusText}`);
         }
+        return response.json();
+    },
+
+    async getHistoricalData(symbol: string, timeframe?: string, exchange?: string, currency?: string): Promise<HistoricalDataResponse> {
+        const params = new URLSearchParams();
+        if (timeframe) params.append('timeframe', timeframe);
+        if (exchange) params.append('exchange', exchange);
+        if (currency) params.append('currency', currency);
+
+        const url = `${API_BASE_URL}/market/history/${symbol}${params.toString() ? '?' + params.toString() : ''}`;
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch historical data: ${response.statusText}`);
+        }
+
         return response.json();
     }
 };

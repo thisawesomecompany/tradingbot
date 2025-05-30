@@ -1,0 +1,283 @@
+.chartContainer {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin: 1rem;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chartControls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+.controlGroup {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.controlGroup label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #495057;
+    white-space: nowrap;
+}
+
+.symbolInput {
+    padding: 6px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    text-transform: uppercase;
+    width: 100px;
+}
+
+.symbolInput:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.loadButton,
+.screenshotButton,
+.testButton {
+    padding: 6px 12px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.testButton {
+    background: #28a745;
+}
+
+.loadButton:hover,
+.screenshotButton:hover,
+.testButton:hover {
+    background: #0056b3;
+}
+
+.testButton:hover {
+    background: #218838;
+}
+
+.loadButton:disabled,
+.screenshotButton:disabled,
+.testButton:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+}
+
+.timeframeSelect {
+    padding: 6px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    background: white;
+    cursor: pointer;
+}
+
+.timeframeSelect:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.loadingIndicator {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #007bff;
+    font-size: 14px;
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+    font-size: 16px;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.chartWrapper {
+    position: relative;
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.chart {
+    width: 100%;
+    height: 500px;
+    position: relative;
+}
+
+.errorOverlay,
+.loadingOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.95);
+    z-index: 1000;
+}
+
+.errorOverlay {
+    color: #dc3545;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.loadingOverlay {
+    color: #007bff;
+    font-size: 16px;
+}
+
+.loadingSpinner {
+    font-size: 24px;
+    margin-bottom: 10px;
+    animation: spin 1s linear infinite;
+}
+
+.hotkeyInfo {
+    margin-top: 15px;
+    padding: 10px;
+    background: #e7f3ff;
+    border: 1px solid #b8daff;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.hotkeyInfo small {
+    color: #495057;
+    font-size: 12px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .chartControls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .controlGroup {
+        justify-content: space-between;
+    }
+
+    .symbolInput {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .chart {
+        height: 400px;
+    }
+}
+
+/* Professional trading colors */
+.positive {
+    color: #26a69a;
+}
+
+.negative {
+    color: #ef5350;
+}
+
+/* Loading animation variations */
+.loadingIndicator .spinner,
+.loadingSpinner {
+    color: #007bff;
+}
+
+/* Focus states for accessibility */
+.controlGroup input[type="checkbox"]:focus,
+.symbolInput:focus,
+.timeframeSelect:focus,
+.loadButton:focus,
+.screenshotButton:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+/* Live indicator styling */
+.liveIndicator {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 8px;
+    background: #e8f5e8;
+    border: 1px solid #4caf50;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #2e7d32;
+}
+
+.liveDot {
+    width: 8px;
+    height: 8px;
+    background: #4caf50;
+    border-radius: 50%;
+    animation: pulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    to {
+        opacity: 0.7;
+        transform: scale(0.8);
+    }
+}
+
+/* Data source and streaming indicators */
+.dataSource {
+    font-size: 12px;
+    color: #666;
+    padding: 4px 8px;
+    background: #f0f0f0;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+.streamingProgress {
+    font-size: 11px;
+    color: #007bff;
+    font-weight: 600;
+    padding: 2px 6px;
+    background: #e7f3ff;
+    border-radius: 3px;
+    border: 1px solid #b8daff;
+}

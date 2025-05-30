@@ -93,7 +93,20 @@
 - [x] Add symbol search/input functionality
 - [x] Test: Can search symbols and see quotes
 
-### **Task 3.3: Add Basic Trading Controls**
+### **Task 3.3: Add Chart Visualization System** ✅
+**Goal**: Professional trading charts with real-time data visualization  
+**Must Have**: Historical data charts with technical indicators and interactive controls
+
+- [x] Install and integrate lightweight-charts library
+- [x] Create TradingChart component with candlestick, volume, and SMA series
+- [x] Add interactive controls (symbol search, timeframe switching)
+- [x] Add trading hotkeys (Shift+O: Buy, Shift+P: Sell, Shift+S: Screenshot)
+- [x] Add `/api/market/history/:symbol` endpoint for historical data
+- [x] Add auto-refresh functionality for real-time updates
+- [x] Add professional styling and responsive design
+- [x] Test: Can view interactive charts with realistic data
+
+### **Task 3.4: Add Basic Trading Controls**
 **Goal**: Enable basic order placement  
 **Must Have**: Can place paper trades through UI
 
@@ -181,8 +194,9 @@ npm run dev
 - [x] **Phase 2 Complete**: Frontend Foundation (Dashboard UI + API Integration + Navigation) ✅
 - [x] **Task 3.1 Complete**: IB API Integration ✅
 - [x] **Task 3.2 Complete**: Market Data Endpoints ✅
+- [x] **Task 3.3 Complete**: Chart Visualization System ✅
 - [x] **Documentation**: README.md updated with usage, testing, and TODO integration ✅
-- [ ] **Next**: Task 3.3 - Basic Trading Controls
+- [ ] **Next**: Task 3.4 - Basic Trading Controls
 
 **Last Updated**: May 27, 2025  
-**Current Phase**: Phase 3 - Core Trading Integration (Task 3.2 complete, ready for Task 3.3) 
+**Current Phase**: Phase 3 - Core Trading Integration (Task 3.3 complete, ready for Task 3.4) 
