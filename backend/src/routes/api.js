@@ -1,15 +1,17 @@
-import express from 'express';
-import { ibService } from '../services/ibService';
-import IBClientPortalService from '../services/ibClientPortalService';
-import { StrategyEngine } from '../services/strategyEngine';
-
-const router = express.Router();
-
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const ibService_1 = require("../services/ibService");
+const ibClientPortalService_1 = __importDefault(require("../services/ibClientPortalService"));
+const strategyEngine_1 = require("../services/strategyEngine");
+const router = express_1.default.Router();
 // Use Client Portal API instead of traditional socket API
-const ibPortalService = new IBClientPortalService();
+const ibPortalService = new ibClientPortalService_1.default();
 // Use the singleton instance, not constructor
-const strategyEngine = new StrategyEngine(ibService);
-
+const strategyEngine = new strategyEngine_1.StrategyEngine(ibService_1.ibService);
 // Health check endpoint
 router.get('/health', (req, res) => {
     res.json({
@@ -18,20 +20,19 @@ router.get('/health', (req, res) => {
         service: 'Tactical Trader Backend'
     });
 });
-
 // IB Connection Status (Traditional)
 router.get('/ib/status', (req, res) => {
     try {
-        const status = ibService.getConnectionStatus();
+        const status = ibService_1.ibService.getConnectionStatus();
         res.json(status);
-    } catch (error) {
+    }
+    catch (error) {
         res.status(500).json({
             error: 'Failed to get IB status',
             message: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 });
-
 // IB Client Portal Status
 router.get('/ib/portal/status', (req, res) => {
     res.json({
@@ -41,28 +42,26 @@ router.get('/ib/portal/status', (req, res) => {
         note: 'Client Portal integration pending'
     });
 });
-
 // Trading Status  
 router.get('/trading/status', (req, res) => {
     try {
         res.json({
-            connected: ibService.isConnected(),
+            connected: ibService_1.ibService.isConnected(),
             engineRunning: false, // Remove problematic method call for now
             strategies: [], // Remove problematic method call for now
             lastUpdate: new Date().toISOString()
         });
-    } catch (error) {
+    }
+    catch (error) {
         res.status(500).json({
             error: 'Failed to get trading status',
             message: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 });
-
 // Market Quote (sync version for now)
 router.get('/market/quote/:symbol', (req, res) => {
     const { symbol } = req.params;
-
     try {
         // Use mock data for now to avoid async complications
         const mockQuote = {
@@ -76,26 +75,23 @@ router.get('/market/quote/:symbol', (req, res) => {
             lastUpdate: new Date().toISOString(),
             source: 'mock'
         };
-
         res.json(mockQuote);
-    } catch (error) {
+    }
+    catch (error) {
         res.status(500).json({
             error: 'Failed to get market quote',
             message: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 });
-
 // Market History (sync version for now)  
 router.get('/market/history/:symbol', (req, res) => {
     const { symbol } = req.params;
-
     try {
         // Generate mock historical data
         const bars = [];
         const basePrice = 150;
         const startTime = Date.now() - (100 * 24 * 60 * 60 * 1000); // 100 days ago
-
         for (let i = 0; i < 100; i++) {
             const time = startTime + (i * 24 * 60 * 60 * 1000);
             const open = basePrice + Math.random() * 20 - 10;
@@ -103,7 +99,6 @@ router.get('/market/history/:symbol', (req, res) => {
             const high = Math.max(open, close) + Math.random() * 2;
             const low = Math.min(open, close) - Math.random() * 2;
             const volume = Math.floor(Math.random() * 1000000);
-
             bars.push({
                 time: Math.floor(time / 1000), // LightweightCharts expects seconds
                 open: Number(open.toFixed(2)),
@@ -113,7 +108,6 @@ router.get('/market/history/:symbol', (req, res) => {
                 volume
             });
         }
-
         res.json({
             symbol: symbol.toUpperCase(),
             bars,
@@ -121,14 +115,14 @@ router.get('/market/history/:symbol', (req, res) => {
             lastUpdate: new Date().toISOString(),
             source: 'mock'
         });
-    } catch (error) {
+    }
+    catch (error) {
         res.status(500).json({
             error: 'Failed to get market history',
             message: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 });
-
 // Trading Positions
 router.get('/trading/positions', (req, res) => {
     try {
@@ -143,12 +137,12 @@ router.get('/trading/positions', (req, res) => {
                 realizedPnL: 0
             }
         ]);
-    } catch (error) {
+    }
+    catch (error) {
         res.status(500).json({
             error: 'Failed to get positions',
             message: error instanceof Error ? error.message : 'Unknown error'
         });
     }
 });
-
-export default router; 
+exports.default = router;

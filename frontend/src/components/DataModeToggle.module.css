@@ -1,0 +1,186 @@
+.dataModeToggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    border: 3px solid #e9ecef;
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    margin: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.modeIndicator {
+    display: flex;
+    align-items: center;
+}
+
+.modeStatus {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 2px solid;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.modeStatus.live {
+    background: #fff5f5;
+    border-color: #dc3545;
+    color: #721c24;
+    animation: livePulse 2s infinite;
+}
+
+.modeStatus.simulated {
+    background: #fffbf0;
+    border-color: #ffc107;
+    color: #856404;
+}
+
+@keyframes livePulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 0 0 8px rgba(220, 53, 69, 0);
+    }
+}
+
+.modeIcon {
+    font-size: 24px;
+    animation: iconBounce 1s infinite alternate ease-in-out;
+}
+
+@keyframes iconBounce {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(1.1);
+    }
+}
+
+.modeText {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.modeLabel {
+    font-size: 18px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.modeDescription {
+    font-size: 12px;
+    font-weight: 500;
+    opacity: 0.8;
+}
+
+.modeControls {
+    display: flex;
+    gap: 8px;
+}
+
+.modeButton {
+    padding: 12px 20px;
+    border: 2px solid;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: white;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.modeButton:not(.liveButton) {
+    border-color: #ffc107;
+    color: #856404;
+}
+
+.modeButton:not(.liveButton):hover:not(:disabled) {
+    background: #fff3cd;
+    border-color: #ffb300;
+    transform: translateY(-1px);
+}
+
+.modeButton:not(.liveButton).active {
+    background: #ffc107;
+    color: white;
+    border-color: #ffb300;
+}
+
+.liveButton {
+    border-color: #dc3545;
+    color: #721c24;
+}
+
+.liveButton:hover:not(:disabled) {
+    background: #f8d7da;
+    border-color: #c82333;
+    transform: translateY(-1px);
+}
+
+.liveButton.active {
+    background: #dc3545;
+    color: white;
+    border-color: #c82333;
+    animation: livePulse 2s infinite;
+}
+
+.modeButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .dataModeToggle {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .modeStatus {
+        justify-content: center;
+    }
+
+    .modeControls {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .modeButton {
+        flex: 1;
+        max-width: 150px;
+    }
+}
+
+/* High contrast accessibility */
+@media (prefers-contrast: high) {
+    .modeStatus.live {
+        background: #ffffff;
+        border-color: #000000;
+        color: #000000;
+    }
+
+    .modeStatus.simulated {
+        background: #ffffff;
+        border-color: #000000;
+        color: #000000;
+    }
+}

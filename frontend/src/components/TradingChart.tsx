@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import { createChart, CandlestickSeries, LineSeries, HistogramSeries } from 'lightweight-charts';
 import type { IChartApi, ISeriesApi, CandlestickData, LineData, Time } from 'lightweight-charts';
+import { useDataMode } from '../contexts/DataModeContext';
 import { api } from '../services/api';
 import styles from './TradingChart.module.css';
 
@@ -22,6 +23,7 @@ export const TradingChart: React.FC<TradingChartProps> = ({
     symbol: propSymbol,
     onSymbolChange
 }) => {
+    const { mode, isLive, isSimulated } = useDataMode();
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const chartRef = useRef<IChartApi | null>(null);
     const candlestickSeriesRef = useRef<ISeriesApi<'Candlestick'> | null>(null);
@@ -421,6 +423,12 @@ export const TradingChart: React.FC<TradingChartProps> = ({
         <div className={styles.chartContainer}>
             {/* Chart Controls */}
             <div className={styles.chartControls}>
+                <div className={styles.controlGroup}>
+                    <span className={`${styles.dataMode} ${isLive ? styles.liveMode : styles.simMode}`}>
+                        {isLive ? '🔴 LIVE DATA MODE' : '🟡 DEMO DATA MODE'}
+                    </span>
+                </div>
+
                 <div className={styles.controlGroup}>
                     <label>Symbol:</label>
                     <input

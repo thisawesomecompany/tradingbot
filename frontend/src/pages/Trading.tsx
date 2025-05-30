@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MarketQuote } from '../components/MarketQuote';
 import { TradingChart } from '../components/TradingChart';
+import { StrategyPanel } from '../components/StrategyPanel';
 
 const Trading: React.FC = () => {
     const [selectedSymbol, setSelectedSymbol] = useState('SPY');
@@ -23,6 +24,9 @@ const Trading: React.FC = () => {
                 onSymbolChange={setSelectedSymbol}
             />
 
+            {/* Automated Trading Strategies Panel */}
+            <StrategyPanel />
+
             {/* Market Quote Panel */}
             <MarketQuote />
 
@@ -34,7 +38,7 @@ const Trading: React.FC = () => {
                 border: '1px solid #dee2e6',
                 borderRadius: '8px'
             }}>
-                <h3>🎯 Trading Controls</h3>
+                <h3>🎯 Manual Trading Controls</h3>
                 <div style={{
                     display: 'grid',
                     gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
@@ -146,7 +150,7 @@ const Trading: React.FC = () => {
                     fontSize: '14px',
                     color: '#495057'
                 }}>
-                    <strong>📝 Note:</strong> This is a demo interface. Trading functionality will be connected to Interactive Brokers in production.
+                    <strong>📝 Note:</strong> This is a demo interface. Manual trading functionality will be connected to Interactive Brokers in production.
                     Use keyboard shortcuts: <strong>Shift+O</strong> (Buy) | <strong>Shift+P</strong> (Sell) | <strong>Shift+S</strong> (Screenshot)
                 </div>
             </div>

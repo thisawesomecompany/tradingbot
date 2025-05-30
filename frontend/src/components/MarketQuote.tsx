@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useApiData } from '../hooks/useApi';
+import { useDataMode } from '../contexts/DataModeContext';
 import { api, type MarketQuote as MarketQuoteType } from '../services/api';
 import styles from './MarketQuote.module.css';
 
 export function MarketQuote() {
+    const { mode, isLive, isSimulated } = useDataMode();
     const [symbol, setSymbol] = useState('AAPL');
     const [currentSymbol, setCurrentSymbol] = useState('');
     const [autoRefresh, setAutoRefresh] = useState(false);
@@ -163,13 +165,16 @@ export function MarketQuote() {
                             </div>
                         </div>
                         <div className={styles.statusIndicators}>
+                            <span className={`${styles.dataMode} ${isLive ? styles.liveMode : styles.simMode}`}>
+                                {isLive ? '🔴 LIVE DATA' : '🟡 DEMO DATA'}
+                            </span>
                             <span className={styles.quoteSource}>
-                                {quoteData.source === 'mock' ? '📋 Mock Data' : '🔗 Interactive Brokers'}
+                                {quoteData.source === 'mock' ? '📋 Mock' : '🔗 API'}
                             </span>
                             {autoRefresh && (
                                 <span className={styles.liveIndicator}>
                                     <span className={styles.liveDot}></span>
-                                    LIVE
+                                    AUTO
                                 </span>
                             )}
                         </div>
