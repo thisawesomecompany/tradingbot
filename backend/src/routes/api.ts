@@ -17,10 +17,15 @@ router.get('/health', (req, res) => {
 router.get('/trading/status', (req, res) => {
     const ibStatus = ibService.getConnectionStatus();
 
+    // Generate dynamic mock data for trading status
+    const isMarketHours = isMarketOpen();
+    const dayPnL = generateDayPnL();
+    const accountValue = 100000 + dayPnL;
+
     res.json({
         status: 'connected',
         account: 'paper',
-        market: 'open',
+        market: isMarketHours ? 'open' : 'closed',
         connection: {
             ib: ibStatus.connected ? 'connected' : 'disconnected',
             lastUpdate: ibStatus.lastUpdate,
@@ -29,7 +34,12 @@ router.get('/trading/status', (req, res) => {
         trading: {
             enabled: ibStatus.connected,
             strategy: 'VWAP',
-            riskLevel: 'low'
+            riskLevel: 'low',
+            accountValue: Math.round(accountValue),
+            dayPnL: Math.round(dayPnL),
+            buyingPower: Math.round(accountValue * 0.25), // 4:1 margin
+            openOrders: Math.floor(Math.random() * 3), // 0-2 open orders
+            lastTradeTime: new Date(Date.now() - Math.random() * 3600000).toISOString() // Random time in last hour
         }
     });
 });
@@ -104,19 +114,9 @@ router.get('/market/quote/:symbol', (req, res) => {
 
             // Check if connected to IB
             if (!ibService.isConnected()) {
-                // Return mock data when not connected to IB
-                const mockQuote = {
-                    symbol: symbol,
-                    exchange: exchange,
-                    currency: currency,
-                    bid: 100.25,
-                    ask: 100.30,
-                    last: 100.27,
-                    close: 99.85,
-                    volume: 1000000,
-                    lastUpdate: new Date().toISOString(),
-                    error: 'Mock data - IB not connected'
-                };
+                // Generate realistic mock data that changes over time
+                const basePrice = getBasePriceForSymbol(symbol);
+                const mockQuote = generateRealisticMockQuote(symbol, exchange, currency, basePrice);
 
                 return res.json({
                     quote: mockQuote,
@@ -143,6 +143,83 @@ router.get('/market/quote/:symbol', (req, res) => {
         }
     })();
 });
+
+// Helper function to get base price for different symbols
+function getBasePriceForSymbol(symbol: string): number {
+    const basePrices: { [key: string]: number } = {
+        'AAPL': 175.50,
+        'TSLA': 245.80,
+        'GOOGL': 142.30,
+        'MSFT': 415.20,
+        'AMZN': 155.75,
+        'NVDA': 875.40,
+        'META': 485.60,
+        'NFLX': 485.90,
+        'AMD': 165.25,
+        'INTC': 43.80
+    };
+
+    return basePrices[symbol] || 100.00;
+}
+
+// Helper function to generate realistic mock market data
+function generateRealisticMockQuote(symbol: string, exchange: string, currency: string, basePrice: number) {
+    // Create time-based variation (changes every few seconds)
+    const timeVariation = Math.sin(Date.now() / 10000) * 0.02; // ±2% variation over time
+    const randomVariation = (Math.random() - 0.5) * 0.01; // ±0.5% random variation
+
+    const currentPrice = basePrice * (1 + timeVariation + randomVariation);
+
+    // Generate realistic bid/ask spread (0.01-0.05% of price)
+    const spreadPercent = 0.0001 + (Math.random() * 0.0004); // 0.01% to 0.05%
+    const spread = currentPrice * spreadPercent;
+
+    const bid = currentPrice - (spread / 2);
+    const ask = currentPrice + (spread / 2);
+
+    // Last price is somewhere between bid and ask
+    const last = bid + (Math.random() * spread);
+
+    // Previous close (yesterday's close)
+    const close = basePrice * (0.98 + Math.random() * 0.04); // ±2% from base
+
+    // Volume varies throughout the day
+    const timeOfDay = (Date.now() % (24 * 60 * 60 * 1000)) / (24 * 60 * 60 * 1000);
+    const volumeMultiplier = 0.5 + Math.sin(timeOfDay * Math.PI) * 0.5; // Higher volume during "market hours"
+    const baseVolume = getBaseVolumeForSymbol(symbol);
+    const volume = Math.floor(baseVolume * volumeMultiplier * (0.8 + Math.random() * 0.4));
+
+    return {
+        symbol: symbol,
+        exchange: exchange,
+        currency: currency,
+        bid: Math.round(bid * 100) / 100,
+        ask: Math.round(ask * 100) / 100,
+        last: Math.round(last * 100) / 100,
+        close: Math.round(close * 100) / 100,
+        volume: volume,
+        lastUpdate: new Date().toISOString(),
+        error: 'Live mock data - IB not connected'
+    };
+}
+
+// Helper function to get base volume for different symbols
+function getBaseVolumeForSymbol(symbol: string): number {
+    const baseVolumes: { [key: string]: number } = {
+        'AAPL': 45000000,
+        'TSLA': 85000000,
+        'GOOGL': 25000000,
+        'MSFT': 35000000,
+        'AMZN': 40000000,
+        'NVDA': 55000000,
+        'META': 30000000,
+        'NFLX': 8000000,
+        'AMD': 45000000,
+        'INTC': 35000000
+    };
+
+    return baseVolumes[symbol] || 10000000;
+}
 
 router.get('/market/search/:pattern', (req, res) => {
     (async () => {
@@ -194,5 +271,24 @@ router.get('/market/search/:pattern', (req, res) => {
         }
     })();
 });
+
+// Helper function to determine if market is open (simplified)
+function isMarketOpen(): boolean {
+    const now = new Date();
+    const hour = now.getHours();
+    const day = now.getDay();
+
+    // Simplified: Monday-Friday, 9:30 AM - 4:00 PM ET (assuming local time)
+    return day >= 1 && day <= 5 && hour >= 9 && hour < 16;
+}
+
+// Helper function to generate realistic day P&L
+function generateDayPnL(): number {
+    // Create time-based variation that changes throughout the day
+    const timeVariation = Math.sin(Date.now() / 50000) * 2000; // ±$2000 variation
+    const randomVariation = (Math.random() - 0.5) * 1000; // ±$500 random
+
+    return timeVariation + randomVariation;
+}
 
 export default router; 

@@ -1,5 +1,5 @@
 // API service for backend communication
-const API_BASE_URL = 'http://localhost:3001/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api';
 
 // Types for API responses
 export interface TradingStatus {
@@ -9,11 +9,17 @@ export interface TradingStatus {
     connection: {
         ib: string;
         lastUpdate: string;
+        error?: string;
     };
     trading: {
         enabled: boolean;
         strategy: string;
         riskLevel: string;
+        accountValue?: number;
+        dayPnL?: number;
+        buyingPower?: number;
+        openOrders?: number;
+        lastTradeTime?: string;
     };
 }
 

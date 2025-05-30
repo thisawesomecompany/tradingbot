@@ -1,5 +1,5 @@
 import React from 'react';
-import StatusPanel from '../components/StatusPanel';
+import { StatusPanel } from '../components/StatusPanel';
 import PositionsPanel from '../components/PositionsPanel';
 
 const Dashboard: React.FC = () => {

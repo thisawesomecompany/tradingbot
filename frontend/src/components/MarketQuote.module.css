@@ -6,6 +6,42 @@
     margin: 20px 0;
 }
 
+.quoteHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.quoteHeader h3 {
+    margin: 0;
+    color: #333;
+}
+
+.autoRefreshControls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.autoRefreshLabel {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    color: #666;
+    cursor: pointer;
+}
+
+.intervalSelect {
+    padding: 4px 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
 .quoteSearch {
     display: flex;
     gap: 10px;
@@ -39,6 +75,35 @@
     background: #0056b3;
 }
 
+.loadingIndicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 .errorMessage {
     background: #f8d7da;
     color: #721c24;
@@ -54,19 +119,52 @@
     background: #f9f9f9;
 }
 
-.quoteHeader {
+.quoteMainHeader {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #ddd;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #ddd;
 }
 
-.quoteHeader h4 {
-    margin: 0;
-    font-size: 24px;
+.symbolInfo h4 {
+    margin: 0 0 10px 0;
+    font-size: 28px;
     color: #333;
+}
+
+.priceChange {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.lastPrice {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+.change {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.change.positive {
+    color: #28a745;
+}
+
+.change.negative {
+    color: #dc3545;
+}
+
+.statusIndicators {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
 }
 
 .quoteSource {
@@ -75,6 +173,40 @@
     background: #e9ecef;
     padding: 4px 8px;
     border-radius: 4px;
+}
+
+.liveIndicator {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #28a745;
+    background: #d4edda;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.liveDot {
+    width: 8px;
+    height: 8px;
+    background: #28a745;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }
 
 .quoteGrid {
@@ -103,6 +235,7 @@
     font-weight: bold;
     font-size: 16px;
     color: #333;
+    transition: all 0.3s ease;
 }
 
 .price.bid {
@@ -111,6 +244,43 @@
 
 .price.ask {
     color: #28a745;
+}
+
+/* Price change animations */
+.priceUp {
+    background: #d4edda !important;
+    color: #155724 !important;
+    animation: flashGreen 1s ease-out;
+}
+
+.priceDown {
+    background: #f8d7da !important;
+    color: #721c24 !important;
+    animation: flashRed 1s ease-out;
+}
+
+@keyframes flashGreen {
+    0% {
+        background: #28a745;
+        color: white;
+    }
+
+    100% {
+        background: #d4edda;
+        color: #155724;
+    }
+}
+
+@keyframes flashRed {
+    0% {
+        background: #dc3545;
+        color: white;
+    }
+
+    100% {
+        background: #f8d7da;
+        color: #721c24;
+    }
 }
 
 .quoteNote {
@@ -152,4 +322,47 @@
 .quoteFooter button:disabled {
     background: #ccc;
     cursor: not-allowed;
+}
+
+.welcomeMessage {
+    text-align: center;
+    padding: 30px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    margin: 20px 0;
+}
+
+.welcomeMessage h4 {
+    margin: 0 0 20px 0;
+    color: #333;
+}
+
+.popularSymbols {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.symbolButton {
+    padding: 8px 16px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+.symbolButton:hover {
+    background: #0056b3;
+    transform: translateY(-1px);
+}
+
+.welcomeMessage p {
+    color: #666;
+    margin: 0;
+    font-style: italic;
 }
