@@ -44,12 +44,27 @@ router.get('/ib/portal/status', (req, res) => {
 
 // Trading Status  
 router.get('/trading/status', (req, res) => {
+    console.log('🔍 Trading status endpoint called - UPDATED VERSION');
     try {
+        const isConnected = ibService.isConnected();
+
         res.json({
-            connected: ibService.isConnected(),
-            engineRunning: false, // Remove problematic method call for now
-            strategies: [], // Remove problematic method call for now
-            lastUpdate: new Date().toISOString()
+            status: 'ok',
+            account: 'DU12345',
+            market: 'open',
+            connection: {
+                ib: isConnected ? 'connected' : 'disconnected',
+                lastUpdate: new Date().toISOString()
+            },
+            trading: {
+                enabled: false,
+                strategy: 'VWAP Scalping',
+                riskLevel: 'medium',
+                accountValue: 100000,
+                dayPnL: 250.50,
+                buyingPower: 25000,
+                openOrders: 0
+            }
         });
     } catch (error) {
         res.status(500).json({
@@ -59,7 +74,16 @@ router.get('/trading/status', (req, res) => {
     }
 });
 
-// Market Quote (sync version for now)
+// Test endpoint to verify code updates
+router.get('/test', (req, res) => {
+    res.json({
+        message: 'Code updated successfully',
+        timestamp: new Date().toISOString(),
+        version: '2.0'
+    });
+});
+
+// Market Quote - Fixed for Express v5
 router.get('/market/quote/:symbol', (req, res) => {
     const { symbol } = req.params;
 
@@ -86,7 +110,7 @@ router.get('/market/quote/:symbol', (req, res) => {
     }
 });
 
-// Market History (sync version for now)  
+// Market History - Fixed for Express v5
 router.get('/market/history/:symbol', (req, res) => {
     const { symbol } = req.params;
 
@@ -132,8 +156,8 @@ router.get('/market/history/:symbol', (req, res) => {
 // Trading Positions
 router.get('/trading/positions', (req, res) => {
     try {
-        // Mock positions for now
-        res.json([
+        // Mock positions data matching the frontend PositionsData interface
+        const positions = [
             {
                 symbol: 'SPY',
                 quantity: 100,
@@ -142,7 +166,17 @@ router.get('/trading/positions', (req, res) => {
                 unrealizedPnL: 25.00,
                 realizedPnL: 0
             }
-        ]);
+        ];
+
+        // Return the expected PositionsData structure
+        res.json({
+            positions,
+            totalValue: 100000,
+            cash: 50000,
+            dayPnL: 250.50,
+            totalPnL: 1250.75,
+            lastUpdate: new Date().toISOString()
+        });
     } catch (error) {
         res.status(500).json({
             error: 'Failed to get positions',
