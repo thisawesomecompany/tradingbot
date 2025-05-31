@@ -1,9 +1,8 @@
-import React from 'react';
 import { useDataMode } from '../contexts/DataModeContext';
 import styles from './DataModeToggle.module.css';
 
-export const DataModeToggle: React.FC = () => {
-    const { mode, setMode, isLive, isSimulated } = useDataMode();
+export function DataModeToggle() {
+    const { setMode, isLive, isSimulated } = useDataMode();
 
     const handleModeChange = (newMode: 'live' | 'simulated') => {
         if (newMode === 'live') {
@@ -57,4 +56,4 @@ export const DataModeToggle: React.FC = () => {
             </div>
         </div>
     );
-}; 
+} 

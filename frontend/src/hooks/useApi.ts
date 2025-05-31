@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { api } from '../services/api';
+import api from '../services/api';
 import type { TradingStatus, PositionsData, HealthCheck } from '../services/api';
 
 // Generic hook for API calls with loading and error states

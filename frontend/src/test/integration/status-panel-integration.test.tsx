@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import { vi } from 'vitest';
+import { vi, beforeEach, describe, it, expect } from 'vitest';
+import api from '../../services/api';
 import { StatusPanel } from '../../components/StatusPanel';
-import { api } from '../../services/api';
 import { renderWithProviders } from '../setup';
 
 // Test with real API structure (not mocked)

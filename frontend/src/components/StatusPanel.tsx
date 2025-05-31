@@ -1,6 +1,5 @@
-import React from 'react';
 import { useApiData } from '../hooks/useApi';
-import { api, type TradingStatus } from '../services/api';
+import api, { type TradingStatus } from '../services/api';
 
 export function StatusPanel() {
     const { data: status, loading, error } = useApiData<TradingStatus>(

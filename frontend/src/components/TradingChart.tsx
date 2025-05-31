@@ -1,8 +1,8 @@
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import { createChart, CandlestickSeries, LineSeries, HistogramSeries } from 'lightweight-charts';
-import type { IChartApi, ISeriesApi, CandlestickData, LineData, Time } from 'lightweight-charts';
+import type { IChartApi, ISeriesApi, LineData, Time } from 'lightweight-charts';
 import { useDataMode } from '../contexts/DataModeContext';
-import { api } from '../services/api';
+import api from '../services/api';
 import styles from './TradingChart.module.css';
 
 interface BarData {
@@ -23,7 +23,7 @@ export const TradingChart: React.FC<TradingChartProps> = ({
     symbol: propSymbol,
     onSymbolChange
 }) => {
-    const { mode, isLive, isSimulated } = useDataMode();
+    const { isLive } = useDataMode();
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const chartRef = useRef<IChartApi | null>(null);
     const candlestickSeriesRef = useRef<ISeriesApi<'Candlestick'> | null>(null);

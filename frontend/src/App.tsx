@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Header from './components/Header';
 import Navigation from './components/Navigation';
 import { DataModeProvider } from './contexts/DataModeContext';
@@ -6,7 +6,7 @@ import { DataModeToggle } from './components/DataModeToggle';
 import Dashboard from './pages/Dashboard';
 import Trading from './pages/Trading';
 import Settings from './pages/Settings';
-import './App.css'
+import './App.css';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('dashboard');
@@ -46,7 +46,7 @@ function App() {
         </main>
       </div>
     </DataModeProvider>
-  )
+  );
 }
 
-export default App
+export default App;

@@ -1,5 +1,5 @@
 // API service for backend communication
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api';
+const API_BASE_URL = (typeof window !== 'undefined' && (window as any).__VITE_API_BASE_URL__) || 'http://localhost:3001/api';
 
 // Types for API responses
 export interface TradingStatus {
@@ -87,7 +87,7 @@ export interface HistoricalDataResponse {
 }
 
 // API functions
-export const api = {
+const api = {
     // Health check
     async getHealth(): Promise<HealthCheck> {
         const response = await fetch(`${API_BASE_URL}/health`);
@@ -157,4 +157,5 @@ export const api = {
     }
 };
 
+// Export only as default - no named exports to avoid conflicts
 export default api; 

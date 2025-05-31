@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useApiData } from '../hooks/useApi';
 import { useDataMode } from '../contexts/DataModeContext';
-import { api, type MarketQuote as MarketQuoteType } from '../services/api';
+import api, { type MarketQuote as MarketQuoteType } from '../services/api';
 import styles from './MarketQuote.module.css';
 
 export function MarketQuote() {
-    const { mode, isLive, isSimulated } = useDataMode();
+    const { isLive } = useDataMode();
     const [symbol, setSymbol] = useState('AAPL');
     const [currentSymbol, setCurrentSymbol] = useState('');
     const [autoRefresh, setAutoRefresh] = useState(false);
