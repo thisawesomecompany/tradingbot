@@ -1,7 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { vi } from 'vitest';
 import PositionsPanel from '../../components/PositionsPanel';
-import { renderWithProviders } from '../setup';
 
 // Test PositionsPanel with real API responses to catch runtime errors
 describe('PositionsPanel Integration Tests', () => {

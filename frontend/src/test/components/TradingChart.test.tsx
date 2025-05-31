@@ -1,8 +1,8 @@
-import { screen, fireEvent, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { TradingChart } from '../../components/TradingChart';
-import { createMockApiResponse, mockApiError, renderWithProviders } from '../setup';
+import { createMockApiResponse, renderWithProviders } from '../setup';
 
 // Mock the chart data
 const mockChartData = {

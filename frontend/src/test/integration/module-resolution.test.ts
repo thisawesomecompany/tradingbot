@@ -152,7 +152,6 @@ describe('Module Resolution Tests', () => {
             expect('API_BASE_URL' in module).toBe(false);
 
             // Should only have the expected exports
-            const expectedExports = ['default'];
             const actualExports = Object.keys(module).filter(key =>
                 // Filter out TypeScript-generated exports and focus on actual runtime exports
                 !key.startsWith('__') && (module as any)[key] !== undefined

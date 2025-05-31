@@ -54,7 +54,7 @@ export const StrategyPanel: React.FC = () => {
     const [engineRunning, setEngineRunning] = useState(false);
     const [strategies, setStrategies] = useState<{ [symbol: string]: StrategyStatus }>({});
     const [newSymbol, setNewSymbol] = useState('SPY');
-    const [config, setConfig] = useState<StrategyConfig>({
+    const [config] = useState<StrategyConfig>({
         enabled: true,
         symbol: 'SPY',
         riskPerTrade: 100,

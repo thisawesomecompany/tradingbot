@@ -1,6 +1,5 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import { vi, beforeEach, describe, it, expect } from 'vitest';
-import api from '../../services/api';
 import { StatusPanel } from '../../components/StatusPanel';
 import { renderWithProviders } from '../setup';
 
